@@ -60,6 +60,9 @@ async function getOne(req, res) {
 }
 
 async function editOne(req, res) {
+  if (typeof req.body.parent === "string" && req.body.parent !== "") {
+    req.body.parent = JSON.parse(req.body?.parent);
+  }
   try {
     const existingPupil = await PupilModel.findById(req.params.id);
 

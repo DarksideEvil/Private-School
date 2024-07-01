@@ -1,6 +1,7 @@
 const UserModel = require("../models/user");
 const { sign } = require("jsonwebtoken");
 const env = process.env;
+// const specs = require('../swagger')
 
 async function register(req, res) {
   const { username, phone, password, role } = req.body;
@@ -50,6 +51,8 @@ async function login(req, res) {
       env.JWT_SECRET,
       { expiresIn: env.JWT_USER_EXPIRE }
     );
+
+    // specs.components.securitySchemes.bearerAuth.bearerFormat = token;
 
     return res.status(200).json({
       msg: `Welcome back ${existUser.username}`,

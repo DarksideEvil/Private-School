@@ -2,7 +2,7 @@ const multer = require("multer");
 const path = require("path");
 const { existsSync, mkdirSync, writeFile } = require("fs");
 const uploadPath = path.join(__dirname, "../uploads");
-const { promisify } = require('util')
+const { promisify } = require("util");
 const writeFileAsync = promisify(writeFile);
 
 const storage = multer.memoryStorage();
@@ -22,21 +22,19 @@ const fileFilter = (req, file, cb) => {
 };
 
 async function saveFile(req, res) {
-  if (!req.file) {
-    return res.status(400).send({ msg: "Please upload only one image" });
-  }
-
   if (!existsSync(uploadPath)) {
     mkdirSync(uploadPath, { recursive: true });
   }
 
-  const extension = path.extname(req.file.originalname);
-  const filename = Date.now() + extension;
-  const filePath = path.join(uploadPath, filename);
+  if (req?.file) {
+    const extension = path.extname(req.file?.originalname);
+    const filename = Date.now() + extension;
+    const filePath = path.join(uploadPath, filename);
 
-  writeFileAsync(filePath, req.file.buffer);
-  const url = `${req.protocol}://${req.get("host")}/${filename}`;
-  req.body.img = url;
+    writeFileAsync(filePath, req.file?.buffer);
+    const url = `${req.protocol}://${req.get("host")}/${filename}`;
+    req.body.img = url;
+  }
 }
 
 const upload = multer({

@@ -6,17 +6,17 @@ const allRoutes = require("./router");
 const protection = require("./settings/security/crossOrigin");
 const path = require("path");
 const uploadPath = path.join(__dirname, "./uploads");
-const swaggerConfigs = require("./swagger");
+const { setupSwagger } = require("./swagger");
+
+protection(app);
 
 app.use(express.json());
 
 dbConnection();
 
-protection(app);
-
 app.use(express.static(uploadPath));
 
-swaggerConfigs(app);
+setupSwagger(app);
 
 app.use("/api", allRoutes);
 

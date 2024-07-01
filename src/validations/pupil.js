@@ -10,8 +10,8 @@ const registerSchema = Joi.object({
   parent: Joi.object({
     fullname: Joi.string(),
     phone: Joi.string(),
-  }).required(),
-  img: Joi.object().required(),
+  }),
+  img: Joi.object(),
   phone: Joi.string().trim(true).required(),
   address: Joi.string().trim(true).required(),
   password: Joi.string().trim(true).required(),
@@ -34,6 +34,9 @@ async function validateParams(req, res, next) {
 }
 
 async function validateRegister(req, res, next) {
+  if (typeof req.body?.parent === "string" && req.body?.parent !== "") {
+    req.body.parent = JSON.parse(req.body?.parent);
+  }
   req.body.img = req.file;
   try {
     await registerSchema.validateAsync(req.body);

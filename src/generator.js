@@ -37,53 +37,53 @@
 // const id = "6672b9ced3d6fdaf5d15865d";
 // const daysMonth = 30;
 
-// // async function generate(count, id) {
-// //   for (let i = 0; i < count; i++) {
-// //     const newPupil = new PupilModel({
-// //       firstname: faker.person.firstName(),
-// //       lastname: faker.person.lastName(),
-// //       parent: {
-// //         fullname: faker.person.fullName(),
-// //         phone: faker.phone.number(),
-// //       },
-// //       img: faker.string.hexadecimal(),
-// //       phone: faker.phone.number(),
-// //       address: faker.location.country(),
-// //       password: faker.string.alphanumeric(),
-// //       birthCertificate: faker.string.binary(),
-// //       group: id,
-// //     });
-// //     console.log(newPupil);
-// //     await newPupil.save();
-// //   }
-// // }
+// // // async function generate(count, id) {
+// // //   for (let i = 0; i < count; i++) {
+// // //     const newPupil = new PupilModel({
+// // //       firstname: faker.person.firstName(),
+// // //       lastname: faker.person.lastName(),
+// // //       parent: {
+// // //         fullname: faker.person.fullName(),
+// // //         phone: faker.phone.number(),
+// // //       },
+// // //       img: faker.string.hexadecimal(),
+// // //       phone: faker.phone.number(),
+// // //       address: faker.location.country(),
+// // //       password: faker.string.alphanumeric(),
+// // //       birthCertificate: faker.string.binary(),
+// // //       group: id,
+// // //     });
+// // //     console.log(newPupil);
+// // //     await newPupil.save();
+// // //   }
+// // // }
 
-// // async function generate(id, daysCount) {
-// //   //   for (let i = 0; i < count; i++) {
-// //   const groups = await GroupModel.find();
-// //   for (let m = 0; m < groups.length; m++) {
-// //     const { _id } = groups[m];
+// async function generate(id, daysCount) {
+//   //   for (let i = 0; i < count; i++) {
+//   const groups = await GroupModel.find();
+//   for (let m = 0; m < groups.length; m++) {
+//     const { _id } = groups[m];
 
-// //     const pupils = await PupilModel.find({ group: _id });
+//     const pupils = await PupilModel.find({ group: _id });
 
-// //     for (let k = 0; k < pupils.length; k++) {
-// //       const { _id } = pupils[k];
+//     for (let k = 0; k < pupils.length; k++) {
+//       const { _id } = pupils[k];
 
-// //       for (let j = 0; j < daysCount; j++) {
-// //         const newCheckout = new CheckoutModel({
-// //           pupil: _id,
-// //           checkIn: `2024-06-${String(j + 1).padStart(2, "0")} 07:18`,
-// //           checkOut: `2024-06-${String(j + 1).padStart(2, "0")} 12:31`,
-// //         });
-// //         console.log(newCheckout, j);
-// //         await newCheckout.save();
-// //       }
-// //     }
-// //   }
-// //   //   }
-// // }
+//       for (let j = 0; j < daysCount; j++) {
+//         const newCheckout = new CheckoutModel({
+//           pupil: _id,
+//           checkIn: `2023-06-${String(j + 1).padStart(2, "0")} 07:30`,
+//           checkOut: `2023-06-${String(j + 1).padStart(2, "0")} 12:30`,
+//         });
+//         console.log(newCheckout, j);
+//         await newCheckout.save();
+//       }
+//     }
+//   }
+//   //   }
+// }
 
-// // generate(id, daysMonth);
+// generate(id, daysMonth);
 
 // async function generate(id, daysCount) {
 //   //   for (let i = 0; i < count; i++) {
