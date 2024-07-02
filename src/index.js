@@ -14,6 +14,8 @@ app.use(express.json());
 
 dbConnection();
 
+app.use('/api-docs', express.static(path.join(__dirname, 'public')));
+
 app.use(express.static(uploadPath));
 
 setupSwagger(app);

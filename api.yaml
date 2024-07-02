@@ -44,6 +44,8 @@ paths:
       summary: Returns newly created user
       tags:
         - Users
+      x-roles:
+        - admin
       requestBody:
         required: true
         content:
@@ -69,6 +71,8 @@ paths:
       summary: Returns list of the users
       tags:
         - Users
+      x-roles:
+        - admin
       responses:
         200:
           description: Success getting list of the users
@@ -90,6 +94,8 @@ paths:
       summary: Returns specified user
       tags:
         - Users
+      x-roles:
+        - admin
       parameters:
         - in: path
           name: id
@@ -117,6 +123,8 @@ paths:
       summary: Returns updated user
       tags:
         - Users
+      x-roles:
+        - admin
       parameters:
         - in: path
           name: id
@@ -148,6 +156,8 @@ paths:
       summary: Returns deleted user credentials
       tags:
         - Users
+      x-roles:
+        - admin
       parameters:
         - in: path
           name: id
@@ -177,6 +187,8 @@ paths:
       summary: Returns newly created pupil
       tags:
         - Pupils
+      x-roles:
+        - admin
       requestBody:
         required: true
         content:
@@ -202,6 +214,9 @@ paths:
       summary: Returns the pupils of the specified group
       tags:
         - Pupils
+      x-roles:
+        - admin
+        - boss
       parameters:
         - in: path
           name: id
@@ -232,6 +247,9 @@ paths:
       summary: Returns list of the pupils
       tags:
         - Pupils
+      x-roles:
+        - admin
+        - boss
       responses:
         200:
           description: Success getting list of the pupils
@@ -246,13 +264,16 @@ paths:
         500:
           description: The server encountered an unexpected condition that prevented it from fulfilling the request
   /api/pupils/{id}:
-  # GET ONE
+    # GET ONE
     get:
       security:
         - bearerAuth: []
       summary: Returns specified pupil
       tags:
         - Pupils
+      x-roles:
+        - admin
+        - boss
       parameters:
         - in: path
           name: id
@@ -273,13 +294,15 @@ paths:
                   $ref: "#/components/schemas/Pupil"
         500:
           description: The server encountered an unexpected condition that prevented it from fulfilling the request
-  # EDIT ONE
+    # EDIT ONE
     patch:
       security:
         - bearerAuth: []
       summary: Returns updated pupil
       tags:
         - Pupils
+      x-roles:
+        - admin
       parameters:
         - in: path
           name: id
@@ -329,13 +352,15 @@ paths:
                 $ref: "#/components/schemas/Pupil"
         500:
           description: The server encountered an unexpected condition that prevented it from fulfilling the request
-  # DELETE ONE
+    # DELETE ONE
     delete:
       security:
         - bearerAuth: []
       summary: Returns deleted pupil credentials
       tags:
         - Pupils
+      x-roles:
+        - admin
       parameters:
         - in: path
           name: id
@@ -358,13 +383,15 @@ paths:
   # Groups
 
   /api/groups:
-  # ADD
+    # ADD
     post:
       security:
         - bearerAuth: []
       summary: Returns newly created group
       tags:
         - Groups
+      x-roles:
+        - admin
       requestBody:
         required: true
         content:
@@ -385,13 +412,16 @@ paths:
           description: Access to the requested resource is forbidden
         500:
           description: The server encountered an unexpected condition that prevented it from fulfilling the request
-  # GET ALL
+    # GET ALL
     get:
       security:
         - bearerAuth: []
       summary: Returns list of the group
       tags:
         - Groups
+      x-roles:
+        - admin
+        - boss
       responses:
         200:
           description: Success getting list of the group
@@ -413,6 +443,9 @@ paths:
       summary: Returns specified group
       tags:
         - Groups
+      x-roles:
+        - admin
+        - boss
       parameters:
         - in: path
           name: id
@@ -440,6 +473,8 @@ paths:
       summary: Returns updated group
       tags:
         - Groups
+      x-roles:
+        - admin
       parameters:
         - in: path
           name: id
@@ -474,6 +509,8 @@ paths:
       summary: Returns deleted group credentials
       tags:
         - Groups
+      x-roles:
+        - admin
       parameters:
         - in: path
           name: id
@@ -503,6 +540,9 @@ paths:
       summary: Returns just recorded checkout
       tags:
         - Checkouts
+      x-roles:
+        - admin
+        - device
       parameters:
         - in: path
           name: id
@@ -531,6 +571,8 @@ paths:
       summary: Returns list of the today's or specified date and all group's or specified group's checkouts
       tags:
         - Checkouts
+      x-roles:
+        - admin
       parameters:
         - in: query
           name: limit
@@ -591,6 +633,9 @@ paths:
       summary: Returns list of the specified date and group's reports
       tags:
         - Checkouts
+      x-roles:
+        - admin
+        - boss
       parameters:
         - in: query
           name: group
@@ -627,6 +672,8 @@ paths:
       summary: Returns list of the checkout
       tags:
         - Checkouts
+      x-roles:
+        - admin
       responses:
         200:
           description: Success getting list of the checkout
@@ -648,6 +695,8 @@ paths:
       summary: Returns specified checkout
       tags:
         - Checkouts
+      x-roles:
+        - admin
       parameters:
         - in: path
           name: id
@@ -668,13 +717,15 @@ paths:
                   $ref: "#/components/schemas/Checkout"
         500:
           description: The server encountered an unexpected condition that prevented it from fulfilling the request
-  # EDIT ONE
+    # EDIT ONE
     patch:
       security:
         - bearerAuth: []
       summary: Returns updated checkout
       tags:
         - Checkouts
+      x-roles:
+        - admin
       parameters:
         - in: path
           name: id
@@ -704,13 +755,15 @@ paths:
                 $ref: "#/components/schemas/Checkout"
         500:
           description: The server encountered an unexpected condition that prevented it from fulfilling the request
-  # DELETE ONE
+    # DELETE ONE
     delete:
       security:
         - bearerAuth: []
       summary: Returns deleted checkout credentials
       tags:
         - Checkouts
+      x-roles:
+        - admin
       parameters:
         - in: path
           name: id
