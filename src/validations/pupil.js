@@ -19,6 +19,21 @@ const registerSchema = Joi.object({
   group: Joi.string().hex().length(24).trim(true),
 }).options({ allowUnknown: false });
 
+const updateSchema = Joi.object({
+  firstname: Joi.string().trim(true),
+  lastname: Joi.string().trim(true),
+  parent: Joi.object({
+    fullname: Joi.string(),
+    phone: Joi.string(),
+  }),
+  img: Joi.object(),
+  phone: Joi.string().trim(true),
+  address: Joi.string().trim(true),
+  password: Joi.string().trim(true),
+  birthCertificate: Joi.string().trim(true),
+  group: Joi.string().hex().length(24).trim(true),
+}).options({ allowUnknown: false });
+
 const loginSchema = Joi.object({
   phone: Joi.string().trim(true).required(),
   password: Joi.string().trim(true).required(),
@@ -46,6 +61,19 @@ async function validateRegister(req, res, next) {
   }
 }
 
+async function validateUpdate(req, res, next) {
+  if (typeof req.body?.parent === "string" && req.body?.parent !== "") {
+    req.body.parent = JSON.parse(req.body?.parent);
+  }
+  req.body.img = req.file;
+  try {
+    await updateSchema.validateAsync(req.body);
+    next();
+  } catch (err) {
+    return res.status(400).send({ msg: err.message ? err.message : err });
+  }
+}
+
 async function validateLogin(req, res, next) {
   try {
     await loginSchema.validateAsync(req.body);
@@ -59,4 +87,5 @@ module.exports = {
   validateParams,
   validateRegister,
   validateLogin,
+  validateUpdate,
 };

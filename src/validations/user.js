@@ -11,6 +11,13 @@ const registerSchema = Joi.object({
   role: Joi.string(),
 }).options({ allowUnknown: false });
 
+const updateSchema = Joi.object({
+  username: Joi.string().trim(true),
+  phone: Joi.string().trim(true),
+  password: Joi.string().trim(true),
+  role: Joi.string(),
+}).options({ allowUnknown: false });
+
 const loginSchema = Joi.object({
   phone: Joi.string().trim(true).required(),
   password: Joi.string().trim(true).required(),
@@ -43,8 +50,18 @@ async function validateLogin(req, res, next) {
   }
 }
 
+async function validateUpdate(req, res, next) {
+  try {
+    await updateSchema.validateAsync(req.body);
+    next();
+  } catch (err) {
+    return res.status(400).send({ msg: err.message ? err.message : err });
+  }
+}
+
 module.exports = {
   validateParams,
   validateRegister,
   validateLogin,
+  validateUpdate,
 };

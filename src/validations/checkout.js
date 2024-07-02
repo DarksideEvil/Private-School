@@ -10,6 +10,12 @@ const bodySchema = Joi.object({
   checkOut: Joi.string().trim(true),
 }).options({ allowUnknown: false });
 
+const updateSchema = Joi.object({
+  pupil: Joi.string().hex().length(24),
+  checkIn: Joi.string(),
+  checkOut: Joi.string(),
+}).options({ allowUnknown: false });
+
 async function validateParams(req, res, next) {
   try {
     await paramsSchema.validateAsync(req.params);
@@ -19,13 +25,16 @@ async function validateParams(req, res, next) {
   }
 }
 
-async function validateBody(req, res, next) {
+async function validateUpdate(req, res, next) {
   try {
-    await bodySchema.validateAsync(req.body);
+    await updateSchema.validateAsync(req.body);
     next();
   } catch (err) {
     return res.status(400).send({ msg: err.message ? err.message : err });
   }
 }
 
-module.exports = validateParams;
+module.exports = {
+  validateParams,
+  validateUpdate,
+};

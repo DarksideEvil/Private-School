@@ -8,6 +8,10 @@ const bodySchema = Joi.object({
   name: Joi.string().trim(true).required(),
 }).options({ allowUnknown: false });
 
+const updateSchema = Joi.object({
+  name: Joi.string().trim(true),
+}).options({ allowUnknown: false });
+
 async function validateParams(req, res, next) {
   try {
     await paramsSchema.validateAsync(req.params);
@@ -26,7 +30,17 @@ async function validateBody(req, res, next) {
   }
 }
 
+async function validateUpdate(req, res, next) {
+  try {
+    await updateSchema.validateAsync(req.body);
+    next();
+  } catch (err) {
+    return res.status(400).send({ msg: err.message ? err.message : err });
+  }
+}
+
 module.exports = {
   validateParams,
   validateBody,
+  validateUpdate,
 };

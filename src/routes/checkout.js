@@ -8,7 +8,7 @@ const {
   editOne,
   deleteOne,
 } = require("../controllers/checkout");
-const validateParams = require("../validations/checkout");
+const { validateParams, validateUpdate } = require("../validations/checkout");
 
 const verifyToken = require("../utils/verifyToken");
 const permission = require("../utils/permission");
@@ -35,7 +35,12 @@ router
 
 router
   .route("/:id")
-  .patch(permission("checkout", ["update"]), validateParams, editOne);
+  .patch(
+    permission("checkout", ["update"]),
+    validateParams,
+    validateUpdate,
+    editOne
+  );
 
 router
   .route("/:id")
