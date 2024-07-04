@@ -2,12 +2,14 @@ const CheckoutModel = require("../models/checkOut");
 const PupilModel = require("../models/pupil");
 const { Types } = require("mongoose");
 const moment = require("moment");
+const { infoLogger, errorLogger } = require("../utils/errorHandler");
 
 async function checkOut(req, res) {
   const { id } = req.params;
   const startOfToday = moment().startOf("day").toDate();
   const endOfToday = moment().endOf("day").toDate();
   try {
+    infoLogger(req);
     const existCheckout = await CheckoutModel.findOne({
       pupil: id,
       createdAt: {
@@ -23,7 +25,9 @@ async function checkOut(req, res) {
       existCheckout.checkIn !== null &&
       existCheckout.checkOut !== null
     ) {
-      return res.status(400).json({ msg: `You've already marked for today !` });
+      const msg = `You've already marked for today !`;
+      errorLogger(req, msg, 400);
+      return res.status(400).json({ msg });
     } else if (existCheckout && existCheckout.checkOut === null) {
       existCheckout.checkOut = moment().format("YYYY-MM-DD HH:mm");
       newCondition = await existCheckout.save();
@@ -40,7 +44,7 @@ async function checkOut(req, res) {
 
     return res.status(200).json(result);
   } catch (err) {
-    console.log(err);
+    errorLogger(req, err);
     return res.status(500).json({ msg: err.message ? err.message : err });
   }
 }
@@ -56,6 +60,7 @@ async function todayAttendance(req, res) {
   const page = parseInt(req.query?.page) || 1;
   const limit = parseInt(req.query?.limit) || 10;
   try {
+    infoLogger(req);
     const aggregationPipeline = [
       {
         $match: {
@@ -120,7 +125,9 @@ async function todayAttendance(req, res) {
 
     if (req.query?.group) {
       if (req.query?.group.length !== 24) {
-        return res.status(400).json({ msg: `Invalid group identifier !` });
+        const msg = `Invalid group identifier !`;
+        errorLogger(req, msg, 400);
+        return res.status(400).json({ msg });
       }
 
       aggregationPipeline.splice(6, 0, {
@@ -143,6 +150,7 @@ async function todayAttendance(req, res) {
 
     return res.status(200).json(todayAttendance);
   } catch (err) {
+    errorLogger(req, err);
     return res.status(500).json({ msg: err.message ? err.message : err });
   }
 }
@@ -150,8 +158,11 @@ async function todayAttendance(req, res) {
 async function groupCheckout(req, res) {
   const { group, month } = req.query;
   try {
+    infoLogger(req);
     if (group && group?.length !== 24) {
-      return res.status(400).json({ msg: `Invalid group identifier !` });
+      const msg = `Invalid group identifier !`;
+      errorLogger(req, msg, 400);
+      return res.status(400).json({ msg });
     }
 
     let aggregation = [];
@@ -459,12 +470,14 @@ async function groupCheckout(req, res) {
 
     return res.status(200).json(aggregation[0]);
   } catch (err) {
+    errorLogger(req, err);
     return res.status(500).json({ msg: err.message ? err.message : err });
   }
 }
 
 async function getAll(req, res) {
   try {
+    infoLogger(req);
     const allCheckouts = await CheckoutModel.find().populate(
       "pupil",
       "firstname lastname"
@@ -472,28 +485,34 @@ async function getAll(req, res) {
 
     return res.status(200).json(allCheckouts);
   } catch (err) {
+    errorLogger(req, err);
     return res.status(500).json({ msg: err.message ? err.message : err });
   }
 }
 
 async function getOne(req, res) {
   try {
+    infoLogger(req);
     const singleCheckout = await CheckoutModel.findById(req.params.id).populate(
       "pupil",
       "firstname lastname"
     );
     if (!singleCheckout || req.params.id.length !== 24) {
-      return res.status(404).json({ msg: `Checkout not found !` });
+      const msg = `Checkout not found !`;
+      errorLogger(req, msg, 404);
+      return res.status(404).json({ msg });
     }
 
     return res.status(200).json(singleCheckout);
   } catch (err) {
+    errorLogger(req, err);
     return res.status(500).json({ msg: err.message ? err.message : err });
   }
 }
 
 async function editOne(req, res) {
   try {
+    infoLogger(req);
     const modifiedCheckout = await CheckoutModel.findByIdAndUpdate(
       req.params.id,
       req.body,
@@ -501,27 +520,34 @@ async function editOne(req, res) {
     );
 
     if (!modifiedCheckout || req.params.id.length !== 24) {
-      return res.status(404).json({ msg: `Checkout not found !` });
+      const msg = `Checkout not found !`;
+      errorLogger(req, msg, 404);
+      return res.status(404).json({ msg });
     }
 
     return res.status(200).json(modifiedCheckout);
   } catch (err) {
+    errorLogger(req, err);
     return res.status(500).json({ msg: err.message ? err.message : err });
   }
 }
 
 async function deleteOne(req, res) {
   try {
+    infoLogger(req);
     const deletedCheckout = await CheckoutModel.findByIdAndDelete(
       req.params.id
     );
 
     if (deletedCheckout === null || req.params.id.length !== 24) {
-      return res.status(404).json({ msg: `Checkout not found !` });
+      const msg = `Checkout not found !`;
+      errorLogger(req, msg, 404);
+      return res.status(404).json({ msg });
     }
 
     return res.status(200).json(deletedCheckout);
   } catch (err) {
+    errorLogger(req, err);
     return res.status(500).json({ msg: err.message ? err.message : err });
   }
 }

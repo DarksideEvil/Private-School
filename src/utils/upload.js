@@ -4,6 +4,7 @@ const { existsSync, mkdirSync, writeFile } = require("fs");
 const uploadPath = path.join(__dirname, "../uploads");
 const { promisify } = require("util");
 const writeFileAsync = promisify(writeFile);
+const { errorLogger } = require("../utils/errorHandler");
 
 const storage = multer.memoryStorage();
 
@@ -16,7 +17,9 @@ const fileFilter = (req, file, cb) => {
   ];
 
   if (!allowedMimeTypes.includes(file.mimetype)) {
-    cb(new Error(`Invalid image type !`), false);
+    const msg = `Invalid image type !`
+    errorLogger(req, msg, 400)
+    cb(new Error(msg), false);
   }
   cb(null, true);
 };
@@ -43,27 +46,7 @@ const upload = multer({
   limits: { files: 1, fileSize: 1024 * 1024 * 5 }, // 5MB
 }).single("img");
 
-// function handleMulterError(err, req, res, next) {
-//   if (err instanceof multer.MulterError) {
-//     console.error("Multer error:", err.code);
-//     if (err.code === "LIMIT_UNEXPECTED_FILE") {
-//       return res.status(400).json({ msg: "Please upload only one file!" });
-//     } else if (err.code === "LIMIT_FILE_COUNT") {
-//       return res.status(400).json({ msg: "Too many files uploaded!" });
-//     } else if (err.code === "LIMIT_FILE_SIZE") {
-//       return res.status(400).json({ msg: "File size is too large!" });
-//     }
-//     return res.status(400).json({ msg: `Multer error: ${err.code}` });
-//   } else if (err) {
-//     console.error("General error:", err);
-//     return res.status(400).json({ msg: err.message });
-//   }
-
-//   next();
-// }
-
 module.exports = {
   upload,
   saveFile,
-  // handleMulterError,
 };

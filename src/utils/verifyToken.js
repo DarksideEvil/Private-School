@@ -1,22 +1,27 @@
 const { verify } = require("jsonwebtoken");
+const { errorLogger } = require("../utils/errorHandler");
 
 const verifyToken = (req, res, next) => {
   try {
     const token = req.headers["authorization"];
     if (!token) {
-      return res.status(403).json({ message: "No token provided." });
+      const msg = `No token provided !`;
+      errorLogger(req, msg, 403);
+      return res.status(403).json({ msg });
     }
 
     const decoded = verify(token.split(" ")[1], process.env.JWT_SECRET);
 
     if (!decoded) {
-      return res.status(403).json({ msg: `Failed to authenticate token !` });
+      const msg = `Failed to authenticate token !`;
+      errorLogger(req, msg, 403);
+      return res.status(403).json({ msg });
     }
 
     req.user = decoded;
     next();
   } catch (err) {
-    console.log(err.message ? err.message : err);
+    errorLogger(req, err);
     return res.status(500).json({ msg: err.message ? err.message : err });
   }
 };
