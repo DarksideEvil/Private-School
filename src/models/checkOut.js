@@ -23,6 +23,4 @@ const checkoutSchema = new Schema(
 
 checkoutSchema.plugin(aggregatePaginate);
 
-const CheckoutModel = model("checkout", checkoutSchema);
-
-module.exports = CheckoutModel;
+module.exports = model("checkout", checkoutSchema);

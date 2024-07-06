@@ -1,4 +1,4 @@
-const CheckoutModel = require("../models/checkOut");
+const CheckoutModel = require("../models/checkout");
 const PupilModel = require("../models/pupil");
 const { Types } = require("mongoose");
 const moment = require("moment");
@@ -221,6 +221,27 @@ async function groupCheckout(req, res) {
                       },
                     },
                     {
+                      $addFields: {
+                        totalMinutes: {
+                          $dateDiff: {
+                            startDate: {
+                              $dateFromString: {
+                                dateString: "$checkIn",
+                                format: "%Y-%m-%d %H:%M",
+                              },
+                            },
+                            endDate: {
+                              $dateFromString: {
+                                dateString: "$checkOut",
+                                format: "%Y-%m-%d %H:%M",
+                              },
+                            },
+                            unit: "minute",
+                          },
+                        },
+                      },
+                    },
+                    {
                       $project: {
                         _id: 1,
                         checkIn: 1,
@@ -237,20 +258,13 @@ async function groupCheckout(req, res) {
                           },
                         },
                         studyHours: {
-                          $dateDiff: {
-                            startDate: {
-                              $dateFromString: {
-                                dateString: "$checkIn",
-                                format: "%Y-%m-%d %H:%M",
-                              },
+                          hours: {
+                            $toInt: {
+                              $floor: { $divide: ["$totalMinutes", 60] },
                             },
-                            endDate: {
-                              $dateFromString: {
-                                dateString: "$checkOut",
-                                format: "%Y-%m-%d %H:%M",
-                              },
-                            },
-                            unit: "hour",
+                          },
+                          minutes: {
+                            $toInt: { $mod: ["$totalMinutes", 60] },
                           },
                         },
                       },
@@ -360,32 +374,6 @@ async function groupCheckout(req, res) {
                   firstname: 1,
                   lastname: 1,
                   attendance: 1,
-                  isUnrecordedDeparture: {
-                    $cond: {
-                      if: {
-                        $anyElementTrue: [
-                          {
-                            $map: {
-                              input: "$attendance",
-                              as: "attendanceDetail0",
-                              in: {
-                                $and: [
-                                  {
-                                    $ne: ["$$attendanceDetail0.checkIn", null],
-                                  },
-                                  {
-                                    $eq: ["$$attendanceDetail0.checkOut", null],
-                                  },
-                                ],
-                              },
-                            },
-                          },
-                        ],
-                      },
-                      then: true,
-                      else: false,
-                    },
-                  },
                   isAllAbsent: {
                     $cond: {
                       if: {
