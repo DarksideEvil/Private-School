@@ -1,0 +1,134 @@
+---
+openapi: 3.0.0
+info:
+  title: Parents API
+  version: 1.0.0
+  description: API documentation for parent role
+paths:
+  /api/parents/login:
+    post:
+      summary: Returns generated verification code for access to the system
+      tags:
+        - Auth
+      # security:
+      #   - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  required: true
+      responses:
+        "200":
+          description: Success for access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+        "400":
+          description: Bad Request, expected proper credentials from user
+        "401":
+          description:
+            The client lacks proper authentication credentials or has provided
+            invalid credentials
+        "500":
+          description:
+            The server encountered an unexpected condition that prevented it
+            from fulfilling the request
+
+  /api/parents/verify:
+    post:
+      summary: Returns generated token for access to the system
+      tags:
+        - Auth
+      # security:
+      #   - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                verificationCode:
+                  type: string
+                  required: true
+      responses:
+        "200":
+          description: Success for access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                  token:
+                    type: string
+        "400":
+          description: Bad Request, expected proper credentials from user
+        "401":
+          description:
+            The client lacks proper authentication credentials or has provided
+            invalid credentials
+        "500":
+          description:
+            The server encountered an unexpected condition that prevented it
+            from fulfilling the request
+
+  /api/parents/pupilReports?startDate&endDate:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Returns reports of your child attendace by specified date
+      tags:
+        - Pupils
+      parameters:
+        - in: query
+          name: startDate
+          description: Specify string date "year-month-day"
+          required: true
+          schema:
+            type: string
+            required: true
+            description: YYYY-MM-DD format
+        - in: query
+          name: endDate
+          description: Specify string date "year-month-day"
+          required: true
+          schema:
+            type: string
+            required: true
+            description: YYYY-MM-DD format
+      responses:
+        "200":
+          description: Success getting attendance reports of your child by specified date
+          content:
+            application/json:
+              schema:
+                type: array
+        "403":
+          description: Access to the requested resource is forbidden
+        "500":
+          description:
+            The server encountered an unexpected condition that prevented it
+            from fulfilling the request
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+securitySchemes:
+  bearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT

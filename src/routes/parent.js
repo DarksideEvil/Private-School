@@ -1,20 +1,27 @@
 const router = require("express").Router();
-const { parentAccess, pupilReports } = require("../controllers/parent");
 const {
-  validateParams,
+  parentAccess,
+  parentVerification,
+  pupilReports,
+} = require("../controllers/parent");
+const {
+  // validateParams,
+  validateParentVerify,
   validateParentAccess,
+  validateObtainPupilReport,
 } = require("../validations/parent");
 
 const verifyToken = require("../utils/verifyToken");
 const permission = require("../utils/permission");
 
-router.route("/login").post(validateParentAccess, parentAccess);
+router.route("/login").post(validateParentVerify, parentVerification);
 
-// router.use(verifyToken);
+router.route("/verify").post(validateParentAccess, parentAccess);
 
-router.route("/pupilReports").post(
-  // permission("user", ["write"]), validateRegister,
-  pupilReports
-);
+router.use(verifyToken);
+
+router
+  .route("/pupilReports")
+  .get(permission("parent", ["read"]), validateObtainPupilReport, pupilReports);
 
 module.exports = router;

@@ -208,6 +208,10 @@ const option = {
         url: `http://localhost:${process.env.PORT}/api-docs/swagger_device.yaml`,
         name: "device",
       },
+      {
+        url: `http://localhost:${process.env.PORT}/api-docs/swagger_parent.yaml`,
+        name: "parent",
+      },
     ],
   },
 };

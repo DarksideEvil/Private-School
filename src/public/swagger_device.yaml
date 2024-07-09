@@ -10,8 +10,8 @@ paths:
       summary: Returns generated token for access to the system
       tags:
         - Login
-      security:
-        - bearerAuth: []
+      # security:
+      #   - bearerAuth: []
       requestBody:
         required: true
         content:

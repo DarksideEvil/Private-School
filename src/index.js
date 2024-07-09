@@ -8,10 +8,20 @@ const path = require("path");
 const uploadPath = path.join(__dirname, "./uploads");
 const { setupSwagger } = require("./swagger");
 const globalErrorHandler = require("./utils/globalError");
+const session = require("express-session");
 
 protection(app);
 
 app.use(express.json());
+
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 120000 },
+  })
+);
 
 dbConnection();
 

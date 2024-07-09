@@ -37,7 +37,7 @@ function infoLogger(request) {
       _id: request?.user?._id,
       name: request?.user?.username,
     },
-    requestParams: request.body,
+    requestParams: request.params,
     requestBody: request.body,
     referer: request.headers?.referer,
     method: request.method,
